@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/92/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
+<script type="module">
+import { OrbitControls } from '../js/OrbitControls.js'
+
+
+var scene = new THREE.Scene();
+scene.background = new THREE.Color("#141414");
+
+
+var camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 5000 );
+camera.position.set( 0, -10, 250 );
+
+
+scene.add(camera)
+
+var renderer = new THREE.WebGLRenderer( { antialias: true } );
+renderer.setSize( window.innerWidth, window.innerHeight );
+
+
+var x = document.body.appendChild( renderer.domElement);
+
+
+var controls = new OrbitControls( camera,x );
+
+controls.rotateSpeed = 5.3;
+controls.zoomSpeed = 0.9;
+
+controls.minDistance = 7;
+controls.maxDistance = 11.500;
+
+controls.minPolarAngle = 0; 
+controls.maxPolarAngle = Math.PI /2; 
+
+
+controls.enableRotate = false;
+controls.dampingFactor = 0.5;
+
+
+var light = new THREE.PointLight("CHARCOAL", 5, 50 );
+light.position.set( 4, 30, -20 );
+scene.add( light );
+
+
+
+var light2 = new THREE.AmbientLight( "black", 20, 100 );
+light2.position.set( 310, -10, 30 );
+scene.add( light2 );
+
+
+var loader = new THREE.GLTFLoader();
+
+
+loader.load('scene.gltf', function ( gltf ) {
+    const mesh = gltf.scene.children[ 0 ];
+	  mesh.position.y = -3;
+    mesh.position.z = 4
+    scene.add( mesh );
+    const mixer = new THREE.AnimationMixer( mesh );
+        mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 50 ).play();
+         mixers.push( mixer );
+});
+
+loader.load('./personage/scene.gltf', function ( gltf ) {
+    const mesh = gltf.scene.children[ 0 ];
+	  mesh.position.y = -3;
+    mesh.position.z = 3
+    mesh.position.x = 0.800
+    const dirLight = new THREE.DirectionalLight( 0xffffff );
+		dirLight.position.set( 1, 10, 10 );
+		scene.add( dirLight );
+    scene.add( mesh );
+    const mixer = new THREE.AnimationMixer( mesh );
+    mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 40 ).play();
+    mixers.push( mixer ); 
+});
+
+loader.load('./personage2/scene.gltf', function ( gltf ) {
+  const mesh = gltf.scene.children[ 0 ];
+  mesh.position.y = -3
+  mesh.position.z = 4
+  mesh.position.x = 1.400
+  mesh.scale.y = -3
+  const dirLight = new THREE.DirectionalLight( 0xffffff );
+	dirLight.position.set( 1, 10, 10 );
+	scene.add( dirLight );
+  scene.add( mesh );
+  const mixer = new THREE.AnimationMixer( mesh );
+    mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 40 ).play();
+    mixers.push( mixer ); 
+});
+
+const clock = new THREE.Clock();
+const mixers = [];
+function animate() {
+    requestAnimationFrame( animate );
+    const delta = clock.getDelta();
+
+    for ( let i = 0; i < mixers.length; i ++ ) {
+      mixers[ i ].update( delta );
+    }
+
+    controls.update()
+    renderer.render( scene, camera );
+};
+
+animate();
+</script>
+<style>
+  body {
+width: 100vw;
+height: 100vh;
+margin: 0;
+overflow: hidden;
+}
+</style>
+</body>
+</html>
