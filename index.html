@@ -60,6 +60,28 @@ scene.add( light2 );
 
 var loader = new THREE.GLTFLoader();
 
+loader.load('./chair/scene.gltf', function ( gltf ) {
+    const mesh = gltf.scene.children[ 0 ];
+    mesh.position.x = -3
+    mesh.position.y = -3
+    mesh.position.z = 5
+    const dirLight = new THREE.DirectionalLight( 0xffffff );
+		dirLight.position.set( 1, 10, 10 );
+		scene.add( dirLight );
+    scene.add( mesh );
+});
+
+loader.load('./pc/scene.gltf', function ( gltf ) {
+    const mesh = gltf.scene.children[ 0 ];
+    mesh.position.x = -3
+    mesh.position.y = -2
+    mesh.position.z = 5.300
+    mesh.rotation.z = -2.500
+    const dirLight = new THREE.DirectionalLight( 0xffffff );
+		dirLight.position.set( 1, 10, 10 );
+		scene.add( dirLight );
+    scene.add( mesh );
+});
 
 loader.load('scene.gltf', function ( gltf ) {
     const mesh = gltf.scene.children[ 0 ];
@@ -87,13 +109,14 @@ loader.load('./personage/scene.gltf', function ( gltf ) {
 
 loader.load('./personage2/scene.gltf', function ( gltf ) {
   const mesh = gltf.scene.children[ 0 ];
+  mesh.castShadow = true;
   mesh.position.y = -3
   mesh.position.z = 4
   mesh.position.x = 1.400
   mesh.scale.y = -3
   const dirLight = new THREE.DirectionalLight( 0xffffff );
 	dirLight.position.set( 1, 10, 10 );
-	scene.add( dirLight );
+	scene.add( dirLight );      
   scene.add( mesh );
   const mixer = new THREE.AnimationMixer( mesh );
     mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 40 ).play();
