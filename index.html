@@ -60,6 +60,48 @@ scene.add( light2 );
 
 var loader = new THREE.GLTFLoader();
 
+loader.load('./bookcase/scene.gltf', function ( gltf ) {
+    const mesh = gltf.scene.children[ 0 ];
+    mesh.position.x = 3.900
+    mesh.position.y = -2.900
+    mesh.position.z = 5
+    mesh.scale.x = 0.900
+    mesh.scale.y = 0.800
+    mesh.scale.z = 0.900
+    mesh.rotation.z = 34.500
+    const light = new THREE.PointLight( 'black', 1,300 );
+    light.position.set( 50, 50, 50 );
+    scene.add(light)
+    scene.add( mesh );
+});
+
+loader.load('./furniture/scene.gltf', function ( gltf ) {
+    const mesh = gltf.scene.children[ 0 ];
+    mesh.position.x = 2.230
+    mesh.position.y = -2.900
+    mesh.position.z = 8
+    mesh.scale.x = 0.400
+    mesh.scale.y = 0.700
+    mesh.scale.z = 0.900
+    mesh.rotation.z = 23.500
+    const dirLight = new THREE.AmbientLight( 0xffffff );
+		dirLight.position.set( 2, 10, 10 );
+		scene.add( dirLight );
+    scene.add( mesh );
+});
+
+loader.load('./door/scene.gltf', function ( gltf ) {
+    const mesh = gltf.scene.children[ 0 ];
+    mesh.position.x = -4.200
+    mesh.position.y = -2.900
+    mesh.position.z = 8
+    mesh.rotation.z = 20.400
+    const dirLight = new THREE.AmbientLight( 0xffffff );
+		dirLight.position.set( 12, 50, 10 );
+		scene.add( dirLight );
+    scene.add( mesh );
+});
+
 loader.load('./chair/scene.gltf', function ( gltf ) {
     const mesh = gltf.scene.children[ 0 ];
     mesh.position.x = -3
@@ -89,7 +131,7 @@ loader.load('scene.gltf', function ( gltf ) {
     mesh.position.z = 4
     scene.add( mesh );
     const mixer = new THREE.AnimationMixer( mesh );
-        mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 50 ).play();
+        mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 60 ).play();
          mixers.push( mixer );
 });
 
@@ -112,6 +154,8 @@ loader.load('./personage2/scene.gltf', function ( gltf ) {
   mesh.castShadow = true;
   mesh.position.y = -3
   mesh.position.z = 4
+  mesh.scale.y = -33
+  mesh.scale.z = 0.900
   mesh.position.x = 1.400
   mesh.scale.y = -3
   const dirLight = new THREE.DirectionalLight( 0xffffff );
@@ -126,7 +170,6 @@ loader.load('./personage2/scene.gltf', function ( gltf ) {
 const clock = new THREE.Clock();
 const mixers = [];
 function animate() {
-    requestAnimationFrame( animate );
     const delta = clock.getDelta();
 
     for ( let i = 0; i < mixers.length; i ++ ) {
@@ -135,6 +178,7 @@ function animate() {
 
     controls.update()
     renderer.render( scene, camera );
+    requestAnimationFrame( animate );
 };
 
 animate();
